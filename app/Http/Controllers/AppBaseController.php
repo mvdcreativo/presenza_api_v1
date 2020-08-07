@@ -20,7 +20,7 @@ class AppBaseController extends Controller
 {
     public function sendResponse($result, $message)
     {
-        return Response::json($data);
+        return Response::json($result);
     }
 
     public function sendError($error, $code = 404)
