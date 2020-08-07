@@ -230,7 +230,8 @@ class FeatureAPIController extends AppBaseController
         }
         
         $feature->fill($request->all());
-        $feature->slug = Str::slug($request->name);
+
+        if($request->name)$feature->slug = Str::slug($request->name);
         $feature->save();
 
 

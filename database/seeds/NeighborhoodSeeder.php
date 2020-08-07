@@ -28,5 +28,13 @@ class NeighborhoodSeeder extends Seeder
         $neighborhood->code = "1234546,4564684";
         $neighborhood->municipality_id = 2;
         $neighborhood->save();
+
+        $name = "Mar del Tuyú";
+        $neighborhood = new App\Models\Neighborhood;
+        $neighborhood->name = $name;
+        $neighborhood->slug = Str::slug($name);
+        $neighborhood->code = "1234546,4564684";
+        $neighborhood->municipality_id = 3;
+        $neighborhood->save();
     }
 }

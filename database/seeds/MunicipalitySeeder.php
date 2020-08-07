@@ -28,5 +28,13 @@ class MunicipalitySeeder extends Seeder
         $municipality->code = "1234546,4564684";
         $municipality->city_id = 2;
         $municipality->save();
+
+        $name = "Costa Atlántica";
+        $municipality = new App\Models\Municipality;
+        $municipality->name = $name;
+        $municipality->slug = Str::slug($name);
+        $municipality->code = "1234546,4564684";
+        $municipality->city_id = 2;
+        $municipality->save();
     }
 }

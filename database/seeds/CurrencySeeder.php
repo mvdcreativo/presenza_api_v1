@@ -11,12 +11,12 @@ class CurrencySeeder extends Seeder
      */
     public function run()
     {
-        // $currency = new App\Models\Currency;
-        // $currency->name = "Dolares Americanos";
-        // $currency->symbol = "USD";
-        // $currency->value = 1;
-        // $currency->status = "PRE";
-        // $currency->save();
+        $currency = new App\Models\Currency;
+        $currency->name = "Dolares Americanos";
+        $currency->symbol = "USD";
+        $currency->value = 1;
+        $currency->status = "PRE";
+        $currency->save();
 
         $currency = new App\Models\Currency;
         $currency->name = "Pesos Argentinos";

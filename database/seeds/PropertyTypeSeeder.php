@@ -52,5 +52,13 @@ class PropertyTypeSeeder extends Seeder
         $property_type->description = "";
         $property_type->status_id = 1;
         $property_type->save();
+
+        $name = "Chalet";
+        $property_type = new App\Models\Property_type;
+        $property_type->name = $name;
+        $property_type->slug = Str::slug($name);
+        $property_type->description = "";
+        $property_type->status_id = 1;
+        $property_type->save();
     }
 }

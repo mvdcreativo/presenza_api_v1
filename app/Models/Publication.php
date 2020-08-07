@@ -75,8 +75,7 @@ class Publication extends Model
         'id' => 'integer',
         'property_id' => 'integer',
         'status_id' => 'integer',
-        'currency_id' => 'integer',
-        'price' => 'float'
+
     ];
 
     /**
@@ -87,8 +86,7 @@ class Publication extends Model
     public static $rules = [
         'property_id' => 'required',
         'status_id' => 'required',
-        'currency_id' => 'required',
-        'price' => 'required'
+
     ];
 
     /**

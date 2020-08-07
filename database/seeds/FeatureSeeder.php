@@ -38,7 +38,7 @@ class FeatureSeeder extends Seeder
         $feature->type = "MULTI";
         $feature->save();
 
-        $name = "Habitaciones";
+        $name = "Ambientes";
         $feature = new App\Models\Feature;
         $feature->name = $name;
         $feature->slug = Str::slug($name);
@@ -166,5 +166,38 @@ class FeatureSeeder extends Seeder
         $feature->feature_id = 3;
         $feature->type = "OPC";
         $feature->save();
+
+        $name = "Totalmente Equipado";
+        $feature = new App\Models\Feature;
+        $feature->name = $name;
+        $feature->slug = Str::slug($name);
+        $feature->feature_id = 3;
+        $feature->type = "OPC";
+        $feature->save();
+
+        $name = "Horno Empotrado";
+        $feature = new App\Models\Feature;
+        $feature->name = $name;
+        $feature->slug = Str::slug($name);
+        $feature->feature_id = 3;
+        $feature->type = "OPC";
+        $feature->save();
+
+        $name = "Anafe";
+        $feature = new App\Models\Feature;
+        $feature->name = $name;
+        $feature->slug = Str::slug($name);
+        $feature->feature_id = 3;
+        $feature->type = "OPC";
+        $feature->save();
+
+        $name = "Placares en Dormitorios";
+        $feature = new App\Models\Feature;
+        $feature->name = $name;
+        $feature->slug = Str::slug($name);
+        $feature->feature_id = 3;
+        $feature->type = "OPC";
+        $feature->save();
+
     }
 }
