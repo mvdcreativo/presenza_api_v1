@@ -14,10 +14,10 @@ class ImageSeeder extends Seeder
         $json= File::get('database/data/images.json');
         $data= json_decode($json);
 
-        foreach ($data->hits as $campo) {
+        foreach ($data->photos as $campo) {
             $image = new App\Models\Image;
            
-            $image->url = $campo->largeImageURL;
+            $image->url = $campo->src->large;
 
             $image->save();
         }

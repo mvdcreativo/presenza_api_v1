@@ -27,13 +27,6 @@ class PropertySeeder extends Seeder
                         rand(51,60),
                         rand(61,70),
                         rand(71,80),
-                        rand(81,90),
-                        rand(91,100),
-                        rand(101,110),
-                        rand(111,120),
-                        rand(121,130),
-                        rand(131,160),
-                        rand(161,200)
                     ]
                 );
 
