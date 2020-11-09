@@ -22,7 +22,7 @@ class CreatePropertyTypesTable extends Migration
             $table->integer('status_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('status_id')->references('id')->on('statuses');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
         });
     }
 

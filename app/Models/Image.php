@@ -64,7 +64,10 @@ class Image extends Model
         'url',
         'title',
         'subtitle',
-        'description'
+        'description',
+        'url_small',
+        'url_medium',
+        'position'
     ];
 
     /**
@@ -75,9 +78,12 @@ class Image extends Model
     protected $casts = [
         'id' => 'integer',
         'url' => 'string',
+        'url_small' => 'string',
+        'url_medium' => 'string',
         'title' => 'string',
         'subtitle' => 'string',
-        'description' => 'string'
+        'description' => 'string',
+        'position' => 'integer'
     ];
 
     /**
@@ -86,7 +92,9 @@ class Image extends Model
      * @var array
      */
     public static $rules = [
-        'url' => 'required'
+        'url' => 'required',
+        'url_small' => 'required',
+        'url_medium' => 'required'
     ];
 
     public function properties()

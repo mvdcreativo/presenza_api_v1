@@ -25,10 +25,11 @@ class CreateAccountsTable extends Migration
             $table->string('company')->nullable();
             $table->string('cuit')->nullable();
             $table->string('image')->nullable();
+            $table->string('type_doc_iden')->nullable();
             $table->string('role')->default("USER");
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

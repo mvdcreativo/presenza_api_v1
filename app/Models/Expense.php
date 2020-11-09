@@ -5,40 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * @SWG\Definition(
- *      definition="Expense",
- *      required={""},
- *      @SWG\Property(
- *          property="id",
- *          description="id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="name",
- *          description="name",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="description",
- *          description="description",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="created_at",
- *          description="created_at",
- *          type="string",
- *          format="date-time"
- *      ),
- *      @SWG\Property(
- *          property="updated_at",
- *          description="updated_at",
- *          type="string",
- *          format="date-time"
- *      )
- * )
- */
+
 class Expense extends Model
 {
     use SoftDeletes;
@@ -74,11 +41,28 @@ class Expense extends Model
         
     ];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     **/
-    public function properties()
+
+
+    public function expenses_properties_user()
     {
-        return $this->belongsToMany(\App\Models\Property::class, 'expenses_properties');
+        return $this->hasMany(\App\Models\ExpensesPropertiesUsers::class);
+        
     }
+
+
+/////////////////////////////
+    ///SCOPES
+/////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+            return $query
+                ->where('name', "LIKE", '%'.$filter.'%');
+
+    }
+
+
+
+
 }

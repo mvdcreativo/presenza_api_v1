@@ -14,43 +14,59 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', 'Auth\AuthController@login');
+    Route::post('signup', 'Auth\AuthController@signup');
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::get('logout', 'Auth\AuthController@logout');
+        Route::get('user', 'Auth\AuthController@user');
+    });
 });
 
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::apiResource('expenses_properties_users', 'ExpensesPropertiesUsersAPIController');
 
-Route::resource('countries', 'CountryAPIController');
+    Route::get('expenses_properties_users/user/{id}', 'ExpensesPropertiesUsersAPIController@user_expenses_all');
+});
 
-Route::resource('provinces', 'ProvinceAPIController');
+Route::apiResource('users', 'UserAPIController');
 
-Route::resource('cities', 'CityAPIController');
+Route::apiResource('countries', 'CountryAPIController');
 
-Route::resource('municipalities', 'MunicipalityAPIController');
+Route::apiResource('provinces', 'ProvinceAPIController');
 
-Route::resource('neighborhoods', 'NeighborhoodAPIController');
+Route::apiResource('cities', 'CityAPIController');
 
-Route::resource('accounts', 'AccountAPIController');
+Route::apiResource('municipalities', 'MunicipalityAPIController');
 
-Route::resource('taxes', 'TaxAPIController');
+Route::apiResource('neighborhoods', 'NeighborhoodAPIController');
 
-Route::resource('statuses', 'StatusAPIController');
+Route::apiResource('accounts', 'AccountAPIController');
 
-Route::resource('property_types', 'Property_typeAPIController');
+Route::apiResource('taxes', 'TaxAPIController');
 
-Route::resource('properties', 'PropertyAPIController');
+Route::apiResource('statuses', 'StatusAPIController');
 
-Route::resource('currencies', 'CurrencyAPIController');
+Route::apiResource('property_types', 'Property_typeAPIController');
 
-Route::resource('expenses', 'ExpenseAPIController');
+Route::apiResource('properties', 'PropertyAPIController');
 
-Route::resource('transaction_types', 'Transaction_typeAPIController');
+Route::apiResource('currencies', 'CurrencyAPIController');
 
-Route::resource('publications', 'PublicationAPIController');
+Route::apiResource('expenses', 'ExpenseAPIController');
 
-Route::resource('images', 'ImageAPIController');
+Route::apiResource('transaction_types', 'Transaction_typeAPIController');
+
+Route::apiResource('publications', 'PublicationAPIController');
+
+Route::apiResource('images', 'ImageAPIController');
 
 
 
-Route::resource('transactions', 'TransactionAPIController');
+Route::apiResource('transactions', 'TransactionAPIController');
 
-Route::resource('features', 'FeatureAPIController');
+Route::apiResource('features', 'FeatureAPIController');
+Route::get('features_all', 'FeatureAPIController@all');
+
+

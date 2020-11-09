@@ -5,46 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * @SWG\Definition(
- *      definition="Municipality",
- *      required={"name", "city_id"},
- *      @SWG\Property(
- *          property="id",
- *          description="id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="name",
- *          description="name",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="code",
- *          description="code",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="city_id",
- *          description="city_id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="created_at",
- *          description="created_at",
- *          type="string",
- *          format="date-time"
- *      ),
- *      @SWG\Property(
- *          property="updated_at",
- *          description="updated_at",
- *          type="string",
- *          format="date-time"
- *      )
- * )
- */
+
 class Municipality extends Model
 {
     use SoftDeletes;
@@ -101,5 +62,19 @@ class Municipality extends Model
     public function neighborhoods()
     {
         return $this->hasMany(\App\Models\Neighborhood::class);
+    }
+
+
+    /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+            return $query
+                ->orWhere('name', "LIKE", '%'.$filter.'%')
+                ->orWhere('code', "LIKE", '%'.$filter.'%')
+                ->orWhere('id', "LIKE", '%'.$filter.'%');
     }
 }

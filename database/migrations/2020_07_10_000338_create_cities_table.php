@@ -22,7 +22,7 @@ class CreateCitiesTable extends Migration
             $table->integer('province_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('province_id')->references('id')->on('provinces');
+            $table->foreign('province_id')->references('id')->on('provinces')->onDelete('restrict');
         });
     }
 

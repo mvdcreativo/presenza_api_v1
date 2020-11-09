@@ -24,7 +24,8 @@ class UpdateCityAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = City::$rules;
+        // $rules = City::$rules;
+        $rules = [];
         
         return $rules;
     }

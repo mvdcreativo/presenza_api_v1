@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateImagesTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -16,7 +15,9 @@ class CreateImagesTable extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url');
+            $table->string('url')->nullable();
+            $table->string('url_small')->nullable();
+            $table->string('url_medium')->nullable();
             $table->string('title')->nullable();
             $table->string('subtitle')->nullable();
             $table->string('description')->nullable();

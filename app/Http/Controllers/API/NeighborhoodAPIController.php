@@ -61,7 +61,24 @@ class NeighborhoodAPIController extends AppBaseController
             $query->limit($request->get('limit'));
         }
 
-        $neighborhoods = $query->with('municipality')->get();
+       
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        }
+
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        $neighborhoods = $query
+            ->with('municipality')
+            ->filter($request->get('filter'))
+            ->orderBy('id',$sort)
+            ->paginate($per_page);
 
         return $this->sendResponse($neighborhoods->toArray(), 'Neighborhoods retrieved successfully');
     }

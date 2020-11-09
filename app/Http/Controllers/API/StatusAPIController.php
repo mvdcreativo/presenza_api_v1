@@ -58,6 +58,13 @@ class StatusAPIController extends AppBaseController
         if ($request->get('limit')) {
             $query->limit($request->get('limit'));
         }
+        if ($request->get('for_element')) {
+            $elem =  explode(",",$request->get('for_element'));
+
+            foreach ($elem as $value) {
+                $query->orWhere('for', $value);
+            }
+        }        
 
         $statuses = $query->get();
 

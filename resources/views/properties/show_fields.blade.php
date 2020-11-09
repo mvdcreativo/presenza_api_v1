@@ -59,10 +59,7 @@
 </div>
 
 <!-- User Customer Id Field -->
-<div class="form-group">
-    {!! Form::label('user_customer_id', 'User Customer Id:') !!}
-    <p>{{ $property->user_customer_id }}</p>
-</div>
+
 
 <!-- Created At Field -->
 <div class="form-group">

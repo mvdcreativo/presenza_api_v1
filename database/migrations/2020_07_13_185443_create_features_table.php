@@ -22,7 +22,7 @@ class CreateFeaturesTable extends Migration
             $table->string('type');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('feature_id')->references('id')->on('features');
+            $table->foreign('feature_id')->references('id')->on('features')->onDelete('restrict');
         });
     }
 

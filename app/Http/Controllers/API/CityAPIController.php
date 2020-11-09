@@ -60,8 +60,23 @@ class CityAPIController extends AppBaseController
         if ($request->get('limit')) {
             $query->limit($request->get('limit'));
         }
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        };
 
-        $cities = $query->get();
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        $cities = $query
+        ->with('province','municipalities' )
+        ->filter($request->get('filter'))
+        ->orderBy('id', $sort)
+        ->paginate($per_page);
 
         return $this->sendResponse($cities->toArray(), 'Cities retrieved successfully');
     }
@@ -110,7 +125,7 @@ class CityAPIController extends AppBaseController
 
         /** @var City $city */
         $input['slug'] = Str::slug($request->name);
-        $city->slug = Str::slug($request->name);
+        $city = City::create($input);
 
         return $this->sendResponse($city->toArray(), 'City saved successfully');
     }
@@ -222,8 +237,8 @@ class CityAPIController extends AppBaseController
 
         $city->fill($request->all());
         $city->slug = Str::slug($request->name);
-
         $city->save();
+
 
         return $this->sendResponse($city->toArray(), 'City updated successfully');
     }

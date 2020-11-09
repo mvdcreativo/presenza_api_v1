@@ -113,10 +113,6 @@
     },
     {
         "type": "relation",
-        "relation": "mt1,User,id,user_customer"
-    },
-    {
-        "type": "relation",
         "relation": "mt1,Currency"
     },
     {

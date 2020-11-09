@@ -60,8 +60,22 @@ class MunicipalityAPIController extends AppBaseController
         if ($request->get('limit')) {
             $query->limit($request->get('limit'));
         }
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        };
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
 
-        $municipalities = $query->get();
+        $municipalities = $query
+        ->with('city','neighborhoods' )
+        ->filter($request->get('filter'))
+        ->orderBy('id', $sort)
+        ->paginate($per_page);
 
         return $this->sendResponse($municipalities->toArray(), 'Municipalities retrieved successfully');
     }

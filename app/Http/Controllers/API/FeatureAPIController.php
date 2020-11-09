@@ -62,8 +62,24 @@ class FeatureAPIController extends AppBaseController
         if ($request->get('limit')) {
             $query->limit($request->get('limit'));
         }
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        };
 
-        $features = $query->with('feature','features')->get();
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        $features = $query
+        ->with('feature','features')
+        ->filter($request->get('filter'))
+        ->orderBy('id', $sort)
+        ->paginate($per_page);
+
 
         return $this->sendResponse($features->toArray(), 'Features retrieved successfully');
     }
@@ -294,5 +310,22 @@ class FeatureAPIController extends AppBaseController
         $feature->delete();
 
         return $this->sendSuccess('Feature deleted successfully');
+    }
+
+
+    public function all(Request $request)
+    {
+        $query = Feature::query();
+
+        if ($request->get('skip')) {
+            $query->skip($request->get('skip'));
+        }
+        if ($request->get('limit')) {
+            $query->limit($request->get('limit'));
+        }
+        $query->with('feature','features');
+        $features = $query->get();
+
+        return $this->sendResponse($features->toArray(), 'Currencies retrieved successfully');
     }
 }

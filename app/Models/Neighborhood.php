@@ -83,4 +83,17 @@ class Neighborhood extends Model
         return $this->belongsTo(\App\Models\Municipality::class)->with('city');
     }
 
+
+    /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+            return $query
+                ->orWhere('name', "LIKE", '%'.$filter.'%')
+                ->orWhere('code', "LIKE", '%'.$filter.'%')
+                ->orWhere('id', "LIKE", '%'.$filter.'%');
+    }
 }

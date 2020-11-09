@@ -24,6 +24,19 @@ class CreatePropertyAPIRequest extends APIRequest
      */
     public function rules()
     {
-        return Property::$rules;
+        $rules = [
+            'title' => 'required',
+            'address' => 'required',
+            'code' => 'required',
+            'status_id' => 'required|integer',
+            'property_type_id' => 'required|integer',
+            'neighborhood_id' => 'required|integer',
+            'user_owner_id' => 'required|integer',
+            'status_id' => 'required|integer'
+        ];
+
+        // if($this->get('file'))
+        //     $rules = array_merge($rules, ['images' => 'array'])
+        return $rules;
     }
 }

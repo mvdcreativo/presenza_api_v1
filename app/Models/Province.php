@@ -102,4 +102,18 @@ class Province extends Model
     {
         return $this->belongsTo(\App\Models\Country::class);
     }
+
+
+    /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+            return $query
+                ->orWhere('name', "LIKE", '%'.$filter.'%')
+                ->orWhere('code', "LIKE", '%'.$filter.'%')
+                ->orWhere('id', "LIKE", '%'.$filter.'%');
+    }
 }

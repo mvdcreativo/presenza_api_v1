@@ -100,4 +100,19 @@ class City extends Model
     {
         return $this->hasMany(\App\Models\Municipality::class);
     }
+
+
+        
+    /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+            return $query
+                ->orWhere('name', "LIKE", '%'.$filter.'%')
+                ->orWhere('code', "LIKE", '%'.$filter.'%')
+                ->orWhere('id', "LIKE", '%'.$filter.'%');
+    }
 }

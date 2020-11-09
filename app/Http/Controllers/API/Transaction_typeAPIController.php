@@ -18,38 +18,7 @@ use Response;
 
 class Transaction_typeAPIController extends AppBaseController
 {
-    /**
-     * @param Request $request
-     * @return Response
-     *
-     * @SWG\Get(
-     *      path="/transactionTypes",
-     *      summary="Get a listing of the Transaction_types.",
-     *      tags={"Transaction_type"},
-     *      description="Get all Transaction_types",
-     *      produces={"application/json"},
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/Transaction_type")
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+  
     public function index(Request $request)
     {
         $query = Transaction_type::query();
@@ -61,49 +30,29 @@ class Transaction_typeAPIController extends AppBaseController
             $query->limit($request->get('limit'));
         }
 
-        $transactionTypes = $query->get();
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        };
+
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        $transactionTypes = $query
+        // ->with()
+        ->filter($request->get('filter'))
+        ->orderBy('id', $sort)
+        ->paginate($per_page);
 
         return $this->sendResponse($transactionTypes->toArray(), 'Transaction Types retrieved successfully');
     }
 
-    /**
-     * @param CreateTransaction_typeAPIRequest $request
-     * @return Response
-     *
-     * @SWG\Post(
-     *      path="/transactionTypes",
-     *      summary="Store a newly created Transaction_type in storage",
-     *      tags={"Transaction_type"},
-     *      description="Store Transaction_type",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="body",
-     *          in="body",
-     *          description="Transaction_type that should be stored",
-     *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Transaction_type")
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Transaction_type"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    
+
     public function store(CreateTransaction_typeAPIRequest $request)
     {
         $input = $request->all();
@@ -115,44 +64,6 @@ class Transaction_typeAPIController extends AppBaseController
         return $this->sendResponse($transactionType->toArray(), 'Transaction Type saved successfully');
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Get(
-     *      path="/transactionTypes/{id}",
-     *      summary="Display the specified Transaction_type",
-     *      tags={"Transaction_type"},
-     *      description="Get Transaction_type",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Transaction_type",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Transaction_type"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
     public function show($id)
     {
         /** @var Transaction_type $transactionType */
@@ -165,52 +76,8 @@ class Transaction_typeAPIController extends AppBaseController
         return $this->sendResponse($transactionType->toArray(), 'Transaction Type retrieved successfully');
     }
 
-    /**
-     * @param int $id
-     * @param UpdateTransaction_typeAPIRequest $request
-     * @return Response
-     *
-     * @SWG\Put(
-     *      path="/transactionTypes/{id}",
-     *      summary="Update the specified Transaction_type in storage",
-     *      tags={"Transaction_type"},
-     *      description="Update Transaction_type",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Transaction_type",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Parameter(
-     *          name="body",
-     *          in="body",
-     *          description="Transaction_type that should be updated",
-     *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Transaction_type")
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Transaction_type"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    
+
     public function update($id, UpdateTransaction_typeAPIRequest $request)
     {
         /** @var Transaction_type $transactionType */
@@ -227,44 +94,6 @@ class Transaction_typeAPIController extends AppBaseController
         return $this->sendResponse($transactionType->toArray(), 'Transaction_type updated successfully');
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Delete(
-     *      path="/transactionTypes/{id}",
-     *      summary="Remove the specified Transaction_type from storage",
-     *      tags={"Transaction_type"},
-     *      description="Delete Transaction_type",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Transaction_type",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="string"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
     public function destroy($id)
     {
         /** @var Transaction_type $transactionType */

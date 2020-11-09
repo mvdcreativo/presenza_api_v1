@@ -120,7 +120,6 @@
         "inView": true
     },
     {
-        "name": "user_customer_id",
         "dbType": "bigInteger:unsigned:foreign,users,id",
         "htmlType": "text",
         "validations": "",
@@ -171,8 +170,5 @@
         "type": "relation",
         "relation": "mt1,User,user_owner_id,user_owner"
     },
-    {
-        "type": "relation",
-        "relation": "mt1,User,user_customer_id,user_customer"
-    }
+
 ]

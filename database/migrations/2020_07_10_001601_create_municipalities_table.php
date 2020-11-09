@@ -22,7 +22,7 @@ class CreateMunicipalitiesTable extends Migration
             $table->integer('city_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('city_id')->references('id')->on('cities');
+            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
         });
     }
 

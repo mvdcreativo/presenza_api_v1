@@ -54,6 +54,7 @@ class Currency extends Model
 {
     use SoftDeletes;
 
+    
     public $table = 'currencies';
     
 
@@ -112,9 +113,10 @@ class Currency extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function expensesProperties()
+    public function expenses_properties_user()
     {
-        return $this->hasMany(\App\Models\Expenses_property::class);
+        return $this->hasMany(\App\Models\ExpensesPropertiesUsers::class);
+        
     }
 
         /**

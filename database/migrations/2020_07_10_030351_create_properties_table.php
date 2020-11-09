@@ -27,14 +27,12 @@ class CreatePropertiesTable extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->bigInteger('user_owner_id')->unsigned();
-            $table->bigInteger('user_customer_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('property_type_id')->references('id')->on('property_types');
             $table->foreign('neighborhood_id')->references('id')->on('neighborhoods');
             $table->foreign('user_owner_id')->references('id')->on('users');
-            $table->foreign('user_customer_id')->references('id')->on('users');
         });
     }
 

@@ -24,7 +24,8 @@ class UpdateImageAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = Image::$rules;
+        // $rules = Image::$rules;
+        $rules =[];
         
         return $rules;
     }

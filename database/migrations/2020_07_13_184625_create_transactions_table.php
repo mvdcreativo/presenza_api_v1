@@ -24,11 +24,11 @@ class CreateTransactionsTable extends Migration
             $table->integer('currency_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('user_owner_id')->references('id')->on('users');
-            $table->foreign('user_customer_id')->references('id')->on('users');
-            $table->foreign('property_id')->references('id')->on('properties');
-            $table->foreign('transaction_type_id')->references('id')->on('transaction_types');
-            $table->foreign('currency_id')->references('id')->on('currencies');
+            $table->foreign('user_owner_id')->references('id')->on('users')->onDelete('restrict');
+            $table->foreign('user_customer_id')->references('id')->on('users')->onDelete('restrict');
+            $table->foreign('property_id')->references('id')->on('properties')->onDelete('restrict');
+            $table->foreign('transaction_type_id')->references('id')->on('transaction_types')->onDelete('restrict');
+            $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('restrict');
         });
     }
 

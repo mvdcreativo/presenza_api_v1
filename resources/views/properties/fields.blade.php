@@ -52,11 +52,7 @@
     {!! Form::text('user_owner_id', null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- User Customer Id Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('user_customer_id', 'User Customer Id:') !!}
-    {!! Form::text('user_customer_id', null, ['class' => 'form-control']) !!}
-</div>
+
 
 <!-- Submit Field -->
 <div class="form-group col-sm-12">

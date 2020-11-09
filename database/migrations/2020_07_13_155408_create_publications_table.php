@@ -21,8 +21,8 @@ class CreatePublicationsTable extends Migration
 
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('property_id')->references('id')->on('properties');
-            $table->foreign('status_id')->references('id')->on('statuses');
+            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('restrict');
         });
     }
 

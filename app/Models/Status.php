@@ -46,7 +46,8 @@ class Status extends Model
 
 
     public $fillable = [
-        'name'
+        'name',
+        'for'
     ];
 
     /**
@@ -56,7 +57,8 @@ class Status extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string'
+        'name' => 'string',
+        'for'=> 'string'
     ];
 
     /**

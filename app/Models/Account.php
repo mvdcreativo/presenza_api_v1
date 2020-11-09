@@ -101,7 +101,9 @@ class Account extends Model
         'company',
         'cuit',
         'image',
-        'role'
+        'role',
+        'type_doc_iden',
+        
     ];
 
     /**
@@ -120,7 +122,8 @@ class Account extends Model
         'company' => 'string',
         'cuit' => 'string',
         'image' => 'string',
-        'role' => 'string'
+        'role' => 'string',
+        'type_doc_iden' => 'string',
     ];
 
     /**
@@ -137,6 +140,6 @@ class Account extends Model
      **/
     public function user()
     {
-        return $this->hasOne(\App\Models\User::class);
+        return $this->belongsTo(\App\User::class);
     }
 }

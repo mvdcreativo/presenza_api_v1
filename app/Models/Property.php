@@ -3,93 +3,15 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * @SWG\Definition(
- *      definition="Property",
- *      required={"title", "status_id", "property_type_id", "neighborhood_id"},
- *      @SWG\Property(
- *          property="id",
- *          description="id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="title",
- *          description="title",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="code",
- *          description="code",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="description",
- *          description="description",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="status_id",
- *          description="status_id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="property_type_id",
- *          description="property_type_id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="neighborhood_id",
- *          description="neighborhood_id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="latitude",
- *          description="latitude",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="longitude",
- *          description="longitude",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="user_owner_id",
- *          description="user_owner_id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="user_customer_id",
- *          description="user_customer_id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="created_at",
- *          description="created_at",
- *          type="string",
- *          format="date-time"
- *      ),
- *      @SWG\Property(
- *          property="updated_at",
- *          description="updated_at",
- *          type="string",
- *          format="date-time"
- *      )
- * )
- */
 class Property extends Model
 {
     use SoftDeletes;
 
     public $table = 'properties';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -106,8 +28,7 @@ class Property extends Model
         'latitude',
         'longitude',
         'user_owner_id',
-        'user_customer_id',
-        'slug'
+        'slug',
     ];
 
     /**
@@ -126,8 +47,8 @@ class Property extends Model
         'latitude' => 'string',
         'longitude' => 'string',
         'user_owner_id' => 'integer',
-        'user_customer_id' => 'integer',
         'slug' => 'string',
+        'expenses_aprox' => 'float'
 
     ];
 
@@ -137,12 +58,15 @@ class Property extends Model
      * @var array
      */
     public static $rules = [
-        'title' => 'required',
-        'status_id' => 'required',
-        'property_type_id' => 'required',
-        'neighborhood_id' => 'required'
+        // 'title' => 'required',
+        // 'status_id' => 'required',
+        // 'property_type_id' => 'required',
+        // 'neighborhood_id' => 'required'
     ];
 
+    /////////////////////////
+    ///RELACIONES
+    /////////////////////////
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
@@ -172,29 +96,104 @@ class Property extends Model
      **/
     public function userOwner()
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(\App\User::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
-    public function userCustomer()
-    {
-        return $this->belongsTo(\App\Models\User::class);
-    }
 
     public function images()
     {
-        return $this->belongsToMany('App\Models\Image', 'images_properties');
+        return $this->belongsToMany('App\Models\Image', 'images_properties')->orderBy('position', 'ASC');
     }
 
-    public function publications()
+    public function publication()
     {
-        return $this->hasMany('App\Models\Publication');
+        return $this->hasOne('App\Models\Publication');
     }
 
     public function features()
     {
         return $this->belongsToMany('App\Models\Feature', 'features_properties')->with('feature')->withPivot('value');
+    }
+
+    public function expenses_properties_user()
+    {
+        return $this->hasMany(\App\Models\ExpensesPropertiesUsers::class);
+    }
+    /////////////////////////////
+    ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if ($filter)
+            return $query
+                ->orWhere('title', "LIKE", '%' . $filter . '%')
+                ->orWhere('address', "LIKE", '%' . $filter . '%')
+                ->orWhere('code', "LIKE", '%' . $filter . '%');
+    }
+
+    public function scopeFilterFeatures($query, $filterKey, $filterValue)
+    {
+        if ($filterKey)
+            return $query->whereHas('features', function (Builder $q) use ($filterKey, $filterValue) {
+                if (!$filterValue || $filterValue === true) {
+                    $q->where('slug', $filterKey);
+                } else {
+                    $q->where('slug', $filterKey)
+                        ->where('value', $filterValue);
+                }
+            });
+    }
+
+    public function scopeFilterState($query, $filter)
+    {
+        if ($filter)
+            return $query->whereHas('neighborhood', function (Builder $q) use ($filter) {
+                $q->whereHas('municipality', function (Builder $qcity) use ($filter) {
+                    $qcity->whereHas('city', function (Builder $qstate) use ($filter) {
+                        $qstate->where('province_id', $filter);
+                    });
+                });
+            });
+    }
+
+    public function scopeFilterCity($query, $filter)
+    {
+        if ($filter)
+            return $query->whereHas('neighborhood', function (Builder $q) use ($filter) {
+                $q->whereHas('municipality', function (Builder $qcity) use ($filter) {
+                    $qcity->where('city_id', $filter);
+                });
+            });
+    }
+    public function scopeFilterMunicipality($query, $filter)
+    {
+        if ($filter)
+            return $query->whereHas('neighborhood', function (Builder $q) use ($filter) {
+                    $q->where('municipality_id', $filter);
+            });
+    }
+
+    public function scopeFilterNeighborhood($query, $filter)
+    {
+        // print_r($filter);
+        if ($filter)
+            foreach ($filter as $key => $value) {
+                if ($key === 0) {
+                    $query->where('neighborhood_id', $value);
+                }else{
+                    $query->orWhere('neighborhood_id', $value);
+                }
+            }
+        return $query;
+    }
+
+    public function scopeFilterPropertyType($query, $filter)
+    {
+        // print_r($filter);
+        if ($filter)
+
+            return $query->where('property_type_id', $filter->id);
+
     }
 }

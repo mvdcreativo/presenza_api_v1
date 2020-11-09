@@ -89,11 +89,24 @@ class Feature extends Model
      **/
     public function features()
     {
-        return $this->hasMany(\App\Models\Feature::class);
+        return $this->hasMany(\App\Models\Feature::class)->with('feature');
     }
 
     public function properties()
     {
         return $this->belongsToMany('App\Models\Property', 'features_properties')->withPivot('value');
     }
+
+
+    /////////////////////////////
+    ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if ($filter)
+            return $query
+                ->orWhere('name', "LIKE", '%' . $filter . '%');
+    }
+
 }

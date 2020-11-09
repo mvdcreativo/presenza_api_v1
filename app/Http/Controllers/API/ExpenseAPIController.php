@@ -7,6 +7,7 @@ use App\Http\Requests\API\UpdateExpenseAPIRequest;
 use App\Models\Expense;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use App\User;
 use Response;
 
 /**
@@ -16,38 +17,7 @@ use Response;
 
 class ExpenseAPIController extends AppBaseController
 {
-    /**
-     * @param Request $request
-     * @return Response
-     *
-     * @SWG\Get(
-     *      path="/expenses",
-     *      summary="Get a listing of the Expenses.",
-     *      tags={"Expense"},
-     *      description="Get all Expenses",
-     *      produces={"application/json"},
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/Expense")
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+
     public function index(Request $request)
     {
         $query = Expense::query();
@@ -59,49 +29,42 @@ class ExpenseAPIController extends AppBaseController
             $query->limit($request->get('limit'));
         }
 
-        $expenses = $query->get();
+
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        }
+        
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        if ($request->get('filter')) {
+            $filter = $request->get('filter');
+        }else{
+            $filter = "";
+        }
+        if ($request->get('user_id')) {
+            $user_id = $request->get('user_id');
+        }else{
+            $user_id = null;
+        }
+
+        $expenses = $query
+        ->with('expenses_properties_user')
+        ->filter($filter) 
+        ->orderBy('id', $sort)
+        ->paginate($per_page);
+
+        
 
         return $this->sendResponse($expenses->toArray(), 'Expenses retrieved successfully');
     }
 
-    /**
-     * @param CreateExpenseAPIRequest $request
-     * @return Response
-     *
-     * @SWG\Post(
-     *      path="/expenses",
-     *      summary="Store a newly created Expense in storage",
-     *      tags={"Expense"},
-     *      description="Store Expense",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="body",
-     *          in="body",
-     *          description="Expense that should be stored",
-     *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Expense")
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Expense"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+
     public function store(CreateExpenseAPIRequest $request)
     {
         $input = $request->all();
@@ -112,44 +75,7 @@ class ExpenseAPIController extends AppBaseController
         return $this->sendResponse($expense->toArray(), 'Expense saved successfully');
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Get(
-     *      path="/expenses/{id}",
-     *      summary="Display the specified Expense",
-     *      tags={"Expense"},
-     *      description="Get Expense",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Expense",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Expense"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    
     public function show($id)
     {
         /** @var Expense $expense */
@@ -162,52 +88,7 @@ class ExpenseAPIController extends AppBaseController
         return $this->sendResponse($expense->toArray(), 'Expense retrieved successfully');
     }
 
-    /**
-     * @param int $id
-     * @param UpdateExpenseAPIRequest $request
-     * @return Response
-     *
-     * @SWG\Put(
-     *      path="/expenses/{id}",
-     *      summary="Update the specified Expense in storage",
-     *      tags={"Expense"},
-     *      description="Update Expense",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Expense",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Parameter(
-     *          name="body",
-     *          in="body",
-     *          description="Expense that should be updated",
-     *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Expense")
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Expense"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+   
     public function update($id, UpdateExpenseAPIRequest $request)
     {
         /** @var Expense $expense */
@@ -223,44 +104,8 @@ class ExpenseAPIController extends AppBaseController
         return $this->sendResponse($expense->toArray(), 'Expense updated successfully');
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Delete(
-     *      path="/expenses/{id}",
-     *      summary="Remove the specified Expense from storage",
-     *      tags={"Expense"},
-     *      description="Delete Expense",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Expense",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="string"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    
+
     public function destroy($id)
     {
         /** @var Expense $expense */
@@ -274,4 +119,5 @@ class ExpenseAPIController extends AppBaseController
 
         return $this->sendSuccess('Expense deleted successfully');
     }
+
 }

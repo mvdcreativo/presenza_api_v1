@@ -50,7 +50,7 @@ class Property_type extends Model
     use SoftDeletes;
 
     public $table = 'property_types';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -93,5 +93,18 @@ class Property_type extends Model
     public function status()
     {
         return $this->belongsTo(\App\Models\Status::class);
+    }
+
+
+
+    /////////////////////////////
+    ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if ($filter)
+            return $query
+                ->orWhere('name', "LIKE", '%' . $filter . '%');
     }
 }

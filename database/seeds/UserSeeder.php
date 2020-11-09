@@ -13,14 +13,21 @@ class UserSeeder extends Seeder
     {
         $user = new App\User;
         $user->name = "Admin";
+        $user->last_name = "";
+        $user->slug = "admin";
         $user->email = "admin@admin.com";
         $user->password = Hash::make('admin');
         $user->save();
+        $user->account()->save(factory(App\Models\Account::class)->make());
 
         $user = new App\User;
         $user->name = "Emir";
+        $user->last_name = "Mendez";
+        $user->slug = "emir-mendez";
         $user->email = "mvdcreativo@gmail.com";
         $user->password = Hash::make('admin');
         $user->save();
+        $user->account()->save(factory(App\Models\Account::class)->make());
+
     }
 }
