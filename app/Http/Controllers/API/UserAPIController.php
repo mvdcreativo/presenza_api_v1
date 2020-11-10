@@ -238,5 +238,14 @@ class UserAPIController extends AppBaseController
         
     }
 
+    public function properties_user($id)
+    {
+        $user = User::find($id)->properties_owner()->get();
+        
+
+        return $this->sendResponse($user->toArray(), 'Account retrieved successfully');
+
+    }
+
 
 }
