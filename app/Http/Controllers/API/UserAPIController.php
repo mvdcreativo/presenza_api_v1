@@ -27,13 +27,6 @@ class UserAPIController extends AppBaseController
     {
         $query = User::query();
 
-        if ($request->get('skip')) {
-            $query->skip($request->get('skip'));
-        }
-        if ($request->get('limit')) {
-            $query->limit($request->get('limit'));
-        }
-
         if ($request->get('per_page')) {
             $per_page = $request->get('per_page');
         }else{
@@ -51,9 +44,14 @@ class UserAPIController extends AppBaseController
         }else{
             $filter = "";
         }
+        if ($request->get('with')) {
+            $with = $request->get('with');
+        }else{
+            $with = "";
+        }
 
         $users = $query
-            ->with('account')
+            ->with('account',$with)
             ->filter($filter)
 
             ->paginate($per_page);
@@ -243,7 +241,77 @@ class UserAPIController extends AppBaseController
         $user = User::find($id)->properties_owner()->get();
         
 
-        return $this->sendResponse($user->toArray(), 'Account retrieved successfully');
+        return $this->sendResponse($user->toArray(), 'Properties retrieved successfully');
+
+    }
+
+    public function owner_users(Request $request)
+    {
+        $query = User::query();
+
+        
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        }
+        
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        if ($request->get('filter')) {
+            $filter = $request->get('filter');
+        }else{
+            $filter = "";
+        }
+
+
+        $users = $query->with('account','properties_owner')
+            ->filter($filter)
+            ->has('properties_owner')
+            ->paginate($per_page);
+            
+        
+        return $this->sendResponse($users->toArray(), 'Account retrieved successfully');
+
+    }
+
+
+    public function customer_users(Request $request)
+    {
+        $query = User::query();
+
+        
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        }
+        
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        if ($request->get('filter')) {
+            $filter = $request->get('filter');
+        }else{
+            $filter = "";
+        }
+
+
+        $query->filter(function ($value, $key){
+            return $value['transactions_customer']->count() >=1 ;
+        });
+        $query->with('account')
+            ->filter($filter)
+            ->paginate($per_page);
+
+        return $this->sendResponse($query->toArray(), 'Account retrieved successfully');
 
     }
 

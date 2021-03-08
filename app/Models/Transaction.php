@@ -148,4 +148,35 @@ class Transaction extends Model
     {
         return $this->belongsTo(\App\Models\Currency::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     **/
+    public function taxes()
+    {
+        return $this->belongsToMany(\App\Models\Tax::class);
+    }
+
+
+
+
+    /////////////////////////////
+    ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if ($filter)
+            $query
+            ->whereHas('property', function ($q) use ($filter) {
+                $q
+                    ->where('id', "LIKE", '%' . $filter . '%');
+                    // ->orWhere('code', "LIKE", '%' . $filter . '%')
+                    // ->orWhere('title', "LIKE", '%' . $filter . '%')
+                    // ->orWhere('address', "LIKE", '%' . $filter . '%');
+            });
+
+
+        return $query;
+    }
 }

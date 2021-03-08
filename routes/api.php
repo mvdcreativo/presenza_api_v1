@@ -31,6 +31,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('properties_user/{id}', 'UserAPIController@properties_user');
     Route::get('expenses_properties_users/user/{id}', 'ExpensesPropertiesUsersAPIController@user_expenses_all');
 });
+Route::get('owner_users', 'UserAPIController@owner_users');
+Route::get('customer_users', 'UserAPIController@customer_users');
 
 Route::apiResource('users', 'UserAPIController');
 

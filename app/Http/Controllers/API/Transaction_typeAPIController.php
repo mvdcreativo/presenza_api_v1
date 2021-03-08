@@ -23,13 +23,6 @@ class Transaction_typeAPIController extends AppBaseController
     {
         $query = Transaction_type::query();
 
-        if ($request->get('skip')) {
-            $query->skip($request->get('skip'));
-        }
-        if ($request->get('limit')) {
-            $query->limit($request->get('limit'));
-        }
-
         if ($request->get('per_page')) {
             $per_page = $request->get('per_page');
         }else{

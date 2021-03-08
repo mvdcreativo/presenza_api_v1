@@ -5,11 +5,12 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Tax extends Model
+
+class Video extends Model
 {
     use SoftDeletes;
 
-    public $table = 'taxes';
+    public $table = 'videos';
     
 
     protected $dates = ['deleted_at'];
@@ -17,9 +18,10 @@ class Tax extends Model
 
 
     public $fillable = [
-        'name',
-        'value',
-        'abbr'
+        'url',
+        'title',
+        'subtitle',
+        'description',
     ];
 
     /**
@@ -29,9 +31,10 @@ class Tax extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string',
-        'value' => 'float',
-        'abbr' => 'string'
+        'url' => 'string',
+        'title' => 'string',
+        'subtitle' => 'string',
+        'description' => 'string',
     ];
 
     /**
@@ -40,16 +43,11 @@ class Tax extends Model
      * @var array
      */
     public static $rules = [
-        'name' => 'required',
-        'value' => 'required',
-        'abbr' => 'required'
+        'url' => 'required',
     ];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     **/
-    public function transactions()
+    public function properties()
     {
-        return $this->belongsToMany(\App\Models\Transaction::class);
+        return $this->belongsToMany('App\Models\Property', 'properties_videos');
     }
 }

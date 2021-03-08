@@ -105,6 +105,11 @@ class Property extends Model
         return $this->belongsToMany('App\Models\Image', 'images_properties')->orderBy('position', 'ASC');
     }
 
+    public function videos()
+    {
+        return $this->belongsToMany('App\Models\Video', 'properties_videos')->orderBy('id', 'ASC');
+    }
+
     public function publication()
     {
         return $this->hasOne('App\Models\Publication');
@@ -139,8 +144,23 @@ class Property extends Model
                 if (!$filterValue || $filterValue === true) {
                     $q->where('slug', $filterKey);
                 } else {
-                    $q->where('slug', $filterKey)
-                        ->where('value', $filterValue);
+                    
+                    $arr_values = explode("-",$filterValue);//convierto en array para los filtros que buscan entre valores" formato "val-val" 
+
+                    switch ($filterValue) {
+
+                        case is_array($arr_values) && count($arr_values) == 2:
+                            $q->where('slug', $filterKey)
+                            ->whereBetween('value', $arr_values);
+                            break;
+
+                        default:
+                            $q->where('slug', $filterKey)
+                            ->where('value', $filterValue);
+                            break;
+                    }
+
+
                 }
             });
     }

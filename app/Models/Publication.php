@@ -54,7 +54,7 @@ class Publication extends Model
      **/
     public function property()
     {
-        return $this->belongsTo(\App\Models\Property::class)->with('images', 'neighborhood', 'features', 'propertyType');
+        return $this->belongsTo(\App\Models\Property::class)->with('images', 'neighborhood', 'features', 'propertyType', 'videos');
     }
 
     /**

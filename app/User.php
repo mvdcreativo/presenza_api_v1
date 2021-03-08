@@ -62,6 +62,10 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Property::class,'user_owner_id');
     }
     
+    public function transactions_customer()
+    {
+        return $this->hasMany(\App\Models\Transaction::class,'user_customer_id');
+    }
 
 
     /////////////////////////////
@@ -70,10 +74,7 @@ class User extends Authenticatable
 
     public function scopeFilter($query, $filter)
     {
-        if($filter)
-
-       
-
+        if($filter){
             $result = $query->whereHas('account', function($q) use($filter) {
                         $q
                         ->where('role', $filter)
@@ -89,6 +90,14 @@ class User extends Authenticatable
             
             return $result;
 
+        }
+        return $query;
 
     }
+
+
+
+
+
+
 }

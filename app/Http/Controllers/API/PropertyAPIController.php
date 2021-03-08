@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Video;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as AlterImage;
 
@@ -47,7 +48,7 @@ class PropertyAPIController extends AppBaseController
         }
 
         $properties = $query
-            ->with('neighborhood','features', 'status', 'userOwner', 'publication' )
+            ->with('neighborhood','features', 'status', 'userOwner', 'publication' , 'videos')
             ->filter($request->get('filter'))
             ->orderBy('id', $sort)
             ->paginate($per_page);
@@ -78,9 +79,9 @@ class PropertyAPIController extends AppBaseController
                 $path_larg = $url.'larg/'.$imageNewName;
                 $path_medium = $url.'medium/'.$imageNewName;
                 $path_small = $url.'small/'.$imageNewName;
-                $larg_img = $this->transformImage($image, 1280, 900, $path_larg);
-                $medium_img = $this->transformImage($image, 600, 400, $path_medium);
-                $small_img = $this->transformImage($image, 150, 100, $path_small);
+                $larg_img = $this->transformImage($image, 1280, 1000, $path_larg);
+                $medium_img = $this->transformImage($image, 600, 500, $path_medium);
+                $small_img = $this->transformImage($image, 150, 120, $path_small);
 
                 // return [$larg_img , $medium_img , $small_img] ;
                 if ($larg_img && $medium_img && $small_img) {
@@ -88,8 +89,8 @@ class PropertyAPIController extends AppBaseController
                     $image->fill(
                         [
                             'url' => asset('storage/'.$path_larg),
-                            'url_small' => asset('storage/'.$path_medium),
-                            'url_medium' => asset('storage/'.$path_small)
+                            'url_small' => asset('storage/'.$path_small),
+                            'url_medium' => asset('storage/'.$path_medium)
                         ])->save();
                     $image->properties()->sync($property->id);
                 }else{
@@ -105,7 +106,7 @@ class PropertyAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Property $property */
-        $property = Property::with('neighborhood','features','propertyType','images','publication')->find($id);
+        $property = Property::with('neighborhood','features','propertyType','images','publication', 'videos')->find($id);
 
         if (empty($property)) {
             return $this->sendError('Property not found');
@@ -117,7 +118,7 @@ class PropertyAPIController extends AppBaseController
     public function update($id, UpdatePropertyAPIRequest $request)
     {
         /** @var Property $property */
-        $property = Property::with('neighborhood','features','propertyType','images')->find($id);
+        $property = Property::with('neighborhood','features','propertyType','images', 'videos')->find($id);
         // return $request->all();
         if (empty($property)) {
             return $this->sendError('Property not found');
@@ -128,7 +129,16 @@ class PropertyAPIController extends AppBaseController
         $property->save();
         if($request->features){
             $features = $request->features;
-            $property->features()->sync($features, true);
+            // return $features;
+            $property->features()->detach();
+            $property->features()->attach($features);
+        }
+        if($request->video){
+            $video = new Video;
+            $video->url = $request->video;
+            $video->save();
+            $video->properties()->sync($property->id);
+
         }
         if($request->hasFile('images')){
             foreach($request->file('images') as $image)
@@ -146,9 +156,9 @@ class PropertyAPIController extends AppBaseController
                 $path_larg = $url.'larg/'.$imageNewName;
                 $path_medium = $url.'medium/'.$imageNewName;
                 $path_small = $url.'small/'.$imageNewName;
-                $larg_img = $this->transformImage($image, 1280, 900, $path_larg);
-                $medium_img = $this->transformImage($image, 600, 400, $path_medium);
-                $small_img = $this->transformImage($image, 150, 100, $path_small);
+                $larg_img = $this->transformImage($image, 1280, 1000, $path_larg);
+                $medium_img = $this->transformImage($image, 600, 500, $path_medium);
+                $small_img = $this->transformImage($image, 150, 120, $path_small);
 
                 // return [$larg_img , $medium_img , $small_img] ;
                 if ($larg_img && $medium_img && $small_img) {
@@ -156,8 +166,8 @@ class PropertyAPIController extends AppBaseController
                     $image->fill(
                         [
                             'url' => asset('storage/'.$path_larg),
-                            'url_small' => asset('storage/'.$path_medium),
-                            'url_medium' => asset('storage/'.$path_small)
+                            'url_small' => asset('storage/'.$path_small),
+                            'url_medium' => asset('storage/'.$path_medium)
                         ])->save();
                     $image->properties()->sync($property->id);
                 }else{

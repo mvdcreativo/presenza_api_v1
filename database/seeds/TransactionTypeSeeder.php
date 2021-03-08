@@ -19,13 +19,13 @@ class TransactionTypeSeeder extends Seeder
         $transaction_type->slug = Str::slug($name);
         $transaction_type->save();
 
-        $name = "Alquiler";
+        $name = "Alquiler Anual";
         $transaction_type = new App\Models\Transaction_type;
         $transaction_type->name = $name;
         $transaction_type->slug = Str::slug($name);
         $transaction_type->save();
 
-        $name = "Alquiler Temporada";
+        $name = "Alquiler Temporal";
         $transaction_type = new App\Models\Transaction_type;
         $transaction_type->name = $name;
         $transaction_type->slug = Str::slug($name);

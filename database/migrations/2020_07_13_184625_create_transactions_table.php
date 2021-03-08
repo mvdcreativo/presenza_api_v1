@@ -22,8 +22,12 @@ class CreateTransactionsTable extends Migration
             $table->integer('transaction_type_id')->unsigned();
             $table->float('value');
             $table->integer('currency_id')->unsigned();
+            $table->date('date_ini')->nullable();
+            $table->date('date_end')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
+
             $table->foreign('user_owner_id')->references('id')->on('users')->onDelete('restrict');
             $table->foreign('user_customer_id')->references('id')->on('users')->onDelete('restrict');
             $table->foreign('property_id')->references('id')->on('properties')->onDelete('restrict');

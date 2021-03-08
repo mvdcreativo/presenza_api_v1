@@ -31,21 +31,27 @@ class PropertySeeder extends Seeder
                 );
 
                 $features = [
-                    ["feature_id"=> 4, "value"=> rand(1,6)],
-                    ["feature_id"=> 5, "value"=> rand(1,4)],
-                    $faker->randomElement([null, ["feature_id"=> 6, "value"=> rand(1,4) ]]),
-                    ["feature_id"=> 7, "value"=> rand(1,4)],
-                    
+                    ["feature_id"=> 5, "value"=> rand(1,6)],
+                    ["feature_id"=> 6, "value"=> rand(1,2)],
+                    ["feature_id"=> 7, "value"=> rand(1,6)],
                     $faker->randomElement([null, ["feature_id"=> 8, "value"=> rand(1,2) ]]),
+                 
                     $faker->randomElement([null, ["feature_id"=> rand(9,10), "value"=>null ]]),
                     $faker->randomElement([null, ["feature_id"=> rand(11,12), "value"=>null ]]),
                     $faker->randomElement([null, ["feature_id"=> rand(13,14), "value"=>null ]]),
                     $faker->randomElement([null, ["feature_id"=> rand(19,21), "value"=>null ]]),
                     $faker->randomElement([null, ["feature_id"=> rand(22,23), "value"=>null ]]),
 
-                    ["feature_id"=> 16, "value"=> rand(80,1000)],
-                    ["feature_id"=> 17, "value"=> rand(30,300)],
-                    ["feature_id"=> 18, "value"=> $faker->randomElement(["A Estrenar", "Excelente","Muy Bueno","Regular","Para Reciclar","Para Demoler","Con Mejoras"])]
+                    ["feature_id"=> 51, "value"=> rand(80,1000)],
+                    ["feature_id"=> 52, "value"=> rand(30,300)],
+                    ["feature_id"=> 28, "value"=> $faker->randomElement([
+                        "Rergular",
+                        "A Refaccionar",
+                        "Reciclado",
+                        "Bueno",
+                        "Muy Bueno",
+                        "Excelente"
+                        ])]
                 ];
 
                 $features = array_filter($features, function($item){
