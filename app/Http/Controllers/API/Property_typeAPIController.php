@@ -18,38 +18,7 @@ use Response;
 
 class Property_typeAPIController extends AppBaseController
 {
-    /**
-     * @param Request $request
-     * @return Response
-     *
-     * @SWG\Get(
-     *      path="/propertyTypes",
-     *      summary="Get a listing of the Property_types.",
-     *      tags={"Property_type"},
-     *      description="Get all Property_types",
-     *      produces={"application/json"},
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/Property_type")
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    
     public function index(Request $request)
     {
         $query = Property_type::query();
@@ -69,7 +38,7 @@ class Property_typeAPIController extends AppBaseController
         if ($request->get('sort')) {
             $sort = $request->get('sort');
         }else{
-            $sort = "desc";
+            $sort = "asc";
         }
 
         $propertyTypes = $query

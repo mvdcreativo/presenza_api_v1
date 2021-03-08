@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CitySeeder::class);
         $this->call(MunicipalitySeeder::class);
         $this->call(NeighborhoodSeeder::class);
-        $this->call(ExpenseSeeder::class);
+        // $this->call(ExpenseSeeder::class);
         $this->call(FeatureSeeder::class);
         $this->call(StatusSeeder::class);
         $this->call(TaxSeeder::class);
@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
         $this->call(TransactionTypeSeeder::class);
         $this->call(ImageSeeder::class);
         $this->call(PropertyTypeSeeder::class);
-        $this->call(PropertySeeder::class);
-        $this->call(PublicationSeeder::class);
+        // $this->call(PropertySeeder::class);
+        // $this->call(PublicationSeeder::class);
 
     }
 }
