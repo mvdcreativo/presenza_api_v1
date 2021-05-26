@@ -184,56 +184,10 @@ class PropertyAPIController extends AppBaseController
         return $this->sendResponse($property->toArray(), 'Property updated successfully');
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Delete(
-     *      path="/properties/{id}",
-     *      summary="Remove the specified Property from storage",
-     *      tags={"Property"},
-     *      description="Delete Property",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Property",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  type="string"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+
+
     public function destroy(Request $request, $id)
     {
-        /** @var Property $property */
-        // $property = Property::find($id);
-
-        // if (empty($property)) {
-        //     return $this->sendError('Property not found');
-        // }
-
-        // $property->delete();
-
-        // return $this->sendSuccess('Property deleted successfully');
 
         $property = Property::with('images')->findOrFail($id);
 
