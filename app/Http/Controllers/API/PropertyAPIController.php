@@ -74,8 +74,9 @@ class PropertyAPIController extends AppBaseController
             {
 
                 $url = 'images/properties/';
-                $imageNewName = $property->id.'-'.time().'.jpg';
-
+                $original_name = $image->getClientOriginalName();
+                $ext = pathinfo( $original_name,PATHINFO_EXTENSION );
+                $imageNewName = $property->id.'-'.time().$ext;
                 $path_larg = $url.'larg/'.$imageNewName;
                 $path_medium = $url.'medium/'.$imageNewName;
                 $path_small = $url.'small/'.$imageNewName;
@@ -151,7 +152,9 @@ class PropertyAPIController extends AppBaseController
                 // return $originalPath;
                 // $path_larg = Storage::disk('public')->put('images/properties/larg',  $image);
                 $url = 'images/properties/';
-                $imageNewName = $property->id.'-'.time().'.jpg';
+                $original_name = $image->getClientOriginalName();
+                $ext = ".".pathinfo( $original_name,PATHINFO_EXTENSION );
+                $imageNewName = $property->id.'-'.time().$ext;
 
                 $path_larg = $url.'larg/'.$imageNewName;
                 $path_medium = $url.'medium/'.$imageNewName;
@@ -233,8 +236,8 @@ class PropertyAPIController extends AppBaseController
 
     private function transformImage($image, $width, $height, $path)
     {
-        $result_image = AlterImage::make($image)->encode('jpg',75);
-        $result_image->resize($width, $height, function ($constraint){
+        $result_image = AlterImage::make($image);
+        $result_image->resize($width, null, function ($constraint){
             $constraint->aspectRatio();
             $constraint->upsize();
         } );
