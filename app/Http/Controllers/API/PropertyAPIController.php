@@ -146,7 +146,7 @@ class PropertyAPIController extends AppBaseController
             {
                 $this->validate($request, [
 
-                    'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048000'
+                    'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg'
         
                 ]);
                 // return $originalPath;
