@@ -18,4 +18,16 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # Send the CORS header for images and pdfs when browsers request it.
+    #
+    # https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image
+    # https://blog.chromium.org/2011/07/using-cross-domain-images-in-webgl-and.html
+
+        <IfModule mod_headers.c>
+            <FilesMatch "\.(bmp|cur|gif|ico|jpe?g|png|svgz?|webp|pdf)$">
+                Header set Access-Control-Allow-Origin "*"
+            </FilesMatch>
+        </IfModule>
+
 </IfModule>

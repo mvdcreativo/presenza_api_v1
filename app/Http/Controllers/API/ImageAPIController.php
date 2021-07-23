@@ -8,6 +8,10 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Response;
+use Intervention\Image\Facades\Image as AlterImage;
+use Illuminate\Support\Facades\Storage;
+
+
 
 /**
  * Class ImageController
@@ -33,44 +37,7 @@ class ImageAPIController extends AppBaseController
         return $this->sendResponse($images->toArray(), 'Images retrieved successfully');
     }
 
-    /**
-     * @param CreateImageAPIRequest $request
-     * @return Response
-     *
-     * @SWG\Post(
-     *      path="/images",
-     *      summary="Store a newly created Image in storage",
-     *      tags={"Image"},
-     *      description="Store Image",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="body",
-     *          in="body",
-     *          description="Image that should be stored",
-     *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Image")
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Image"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+
     public function store(CreateImageAPIRequest $request)
     {
         $input = $request->all();
@@ -81,44 +48,7 @@ class ImageAPIController extends AppBaseController
         return $this->sendResponse($image->toArray(), 'Image saved successfully');
     }
 
-    /**
-     * @param int $id
-     * @return Response
-     *
-     * @SWG\Get(
-     *      path="/images/{id}",
-     *      summary="Display the specified Image",
-     *      tags={"Image"},
-     *      description="Get Image",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Image",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Image"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+
     public function show($id)
     {
         /** @var Image $image */
@@ -131,64 +61,51 @@ class ImageAPIController extends AppBaseController
         return $this->sendResponse($image->toArray(), 'Image retrieved successfully');
     }
 
-    /**
-     * @param int $id
-     * @param UpdateImageAPIRequest $request
-     * @return Response
-     *
-     * @SWG\Put(
-     *      path="/images/{id}",
-     *      summary="Update the specified Image in storage",
-     *      tags={"Image"},
-     *      description="Update Image",
-     *      produces={"application/json"},
-     *      @SWG\Parameter(
-     *          name="id",
-     *          description="id of Image",
-     *          type="integer",
-     *          required=true,
-     *          in="path"
-     *      ),
-     *      @SWG\Parameter(
-     *          name="body",
-     *          in="body",
-     *          description="Image that should be updated",
-     *          required=false,
-     *          @SWG\Schema(ref="#/definitions/Image")
-     *      ),
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              type="object",
-     *              @SWG\Property(
-     *                  property="success",
-     *                  type="boolean"
-     *              ),
-     *              @SWG\Property(
-     *                  property="data",
-     *                  ref="#/definitions/Image"
-     *              ),
-     *              @SWG\Property(
-     *                  property="message",
-     *                  type="string"
-     *              )
-     *          )
-     *      )
-     * )
-     */
+
     public function update($id, UpdateImageAPIRequest $request)
     {
+
         /** @var Image $image */
         $image = Image::find($id);
 
         if (empty($image)) {
             return $this->sendError('Image not found');
         }
+        // return $image
 
-        $image->fill($request->all());
-        $image->save();
-        
+        if ($request->get('rotate')) {
+            $grad_rotate = $request->get('rotate');
+            $imgName = explode("/", $image->url);
+
+            $img_larg = AlterImage::make(Storage::disk('public')->get('images/properties/larg/' . $imgName[7]));
+            $img_med = AlterImage::make(Storage::disk('public')->get('images/properties/medium/' . $imgName[7]));
+            $img_small = AlterImage::make(Storage::disk('public')->get('images/properties/small/' . $imgName[7]));
+
+            $img_larg->rotate(-$grad_rotate);
+            $img_med->rotate(-$grad_rotate);
+            $img_small->rotate(-$grad_rotate);
+            $newName = "r_" . $grad_rotate . $imgName[7];
+            Storage::disk('public')->put('images/properties/larg/' . $newName, $img_larg->stream());
+            Storage::disk('public')->put('images/properties/medium/' . $newName, $img_med->stream());
+            Storage::disk('public')->put('images/properties/small/' . $newName, $img_small->stream());
+
+            $image->fill(
+                [
+                    'url' => asset('storage/images/properties/larg/' . $newName),
+                    'url_small' => asset('storage/images/properties/medium/' . $newName),
+                    'url_medium' => asset('storage/images/properties/small/' . $newName)
+                ]
+            )->save();
+            Storage::disk('public')->delete('images/properties/larg/' . $imgName[7]);
+            Storage::disk('public')->delete('images/properties/medium/' . $imgName[7]);
+            Storage::disk('public')->delete('images/properties/small/' . $imgName[7]);
+        } else {
+            $image->fill($request->all());
+            $image->save();
+        }
+
+
+
 
         return $this->sendResponse($image->toArray(), 'Image updated successfully');
     }
