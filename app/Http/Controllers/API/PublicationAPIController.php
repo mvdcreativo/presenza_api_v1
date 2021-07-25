@@ -57,7 +57,7 @@ class PublicationAPIController extends AppBaseController
         
 
         $publications = $query
-            ->with('property', 'transaction_types')
+            ->with('property', 'transaction_types', 'status')
             ->filter($request->get('filter'))
             ->filter_status_id($status_id)
             ->filter_params($filterParams)
