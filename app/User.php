@@ -42,13 +42,13 @@ class User extends Authenticatable
 
     ///RELATIONSHIP
 
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
     public function account()
     {
-        return $this->hasOne(\App\Models\Account::class);
+
+        return $this->belongsTo(\App\Models\Account::class);
     }
 
     public function expenses_properties_user()
