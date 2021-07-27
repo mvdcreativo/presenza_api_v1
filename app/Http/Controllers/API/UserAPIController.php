@@ -51,7 +51,7 @@ class UserAPIController extends AppBaseController
         }
 
         $users = $query
-            ->with('account')
+            ->with('account', 'properties_owner')
             ->filter($filter)
 
             ->paginate($per_page);
