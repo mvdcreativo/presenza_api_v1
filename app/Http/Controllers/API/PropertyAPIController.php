@@ -50,6 +50,7 @@ class PropertyAPIController extends AppBaseController
         $properties = $query
             ->with('neighborhood','features', 'status', 'userOwner', 'publication' , 'videos')
             ->filter($request->get('filter'))
+            ->filterByOwnerId($request->get('owner_id'))
             ->orderBy('id', $sort)
             ->paginate($per_page);
 

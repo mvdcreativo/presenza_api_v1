@@ -137,6 +137,13 @@ class Property extends Model
                 ->orWhere('code', "LIKE", '%' . $filter . '%');
     }
 
+    public function scopeFilterByOwnerId($query, $filter)
+    {
+        if ($filter)
+            return $query
+                ->where('user_owner_id',  $filter );
+    }
+
     public function scopeFilterFeatures($query, $filterKey, $filterValue)
     {
         if ($filterKey)
