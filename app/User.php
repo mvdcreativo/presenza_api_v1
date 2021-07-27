@@ -48,7 +48,7 @@ class User extends Authenticatable
     public function account()
     {
 
-        return $this->belongsTo(\App\Models\Account::class);
+        return $this->hasOne(\App\Models\Account::class);
     }
 
     public function expenses_properties_user()
