@@ -82,7 +82,7 @@ class UserAPIController extends AppBaseController
         if($user){
             $account = new Account;
             $account->fill($input_account);
-            $account->user()->associate($user);
+            $account->user_id = $user->id;
             $account->save();
         
 
