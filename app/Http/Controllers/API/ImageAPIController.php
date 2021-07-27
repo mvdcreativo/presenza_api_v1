@@ -92,8 +92,8 @@ class ImageAPIController extends AppBaseController
             $image->fill(
                 [
                     'url' => asset('storage/images/properties/larg/' . $newName),
-                    'url_small' => asset('storage/images/properties/medium/' . $newName),
-                    'url_medium' => asset('storage/images/properties/small/' . $newName)
+                    'url_small' => asset('storage/images/properties/small/' . $newName),
+                    'url_medium' => asset('storage/images/properties/medium/' . $newName)
                 ]
             )->save();
             Storage::disk('public')->delete('images/properties/larg/' . $imgName[7]);
