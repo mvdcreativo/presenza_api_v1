@@ -82,7 +82,9 @@ class Transaction extends Model
         'property_id',
         'transaction_type_id',
         'value',
-        'currency_id'
+        'currency_id', 
+        'date_ini',
+        'date_end'
     ];
 
     /**
