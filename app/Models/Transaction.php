@@ -114,7 +114,7 @@ class Transaction extends Model
      **/
     public function userOwner()
     {
-        return $this->belongsTo(\App\User::class, 'user_owner_id', 'user_owner');
+        return $this->belongsTo(\App\User::class, 'user_owner_id');
     }
 
     /**
