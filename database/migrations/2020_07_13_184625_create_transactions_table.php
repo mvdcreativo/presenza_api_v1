@@ -22,8 +22,8 @@ class CreateTransactionsTable extends Migration
             $table->integer('transaction_type_id')->unsigned();
             $table->float('value');
             $table->integer('currency_id')->unsigned();
-            $table->date('date_ini')->nullable();
-            $table->date('date_end')->nullable();
+            $table->string('date_ini')->nullable();
+            $table->string('date_end')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
