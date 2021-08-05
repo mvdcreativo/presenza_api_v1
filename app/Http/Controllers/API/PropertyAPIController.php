@@ -40,7 +40,7 @@ class PropertyAPIController extends AppBaseController
         }else{
             $per_page = 20;
         }
-        
+
         if ($request->get('sort')) {
             $sort = $request->get('sort');
         }else{
@@ -57,7 +57,7 @@ class PropertyAPIController extends AppBaseController
         return $this->sendResponse($properties->toArray(), 'Properties retrieved successfully');
     }
 
-   
+
     public function store(CreatePropertyAPIRequest $request)
     {
         $input = $request->all();
@@ -77,7 +77,7 @@ class PropertyAPIController extends AppBaseController
                 $url = 'images/properties/';
                 $original_name = $image->getClientOriginalName();
                 $ext = pathinfo( $original_name,PATHINFO_EXTENSION );
-                $imageNewName = $property->id.'-'.time().$ext;
+                $imageNewName = $property->id. Str::random(4).'-'.time().$ext;
                 $path_larg = $url.'larg/'.$imageNewName;
                 $path_medium = $url.'medium/'.$imageNewName;
                 $path_small = $url.'small/'.$imageNewName;
@@ -148,14 +148,14 @@ class PropertyAPIController extends AppBaseController
                 $this->validate($request, [
 
                     'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg'
-        
+
                 ]);
                 // return $originalPath;
                 // $path_larg = Storage::disk('public')->put('images/properties/larg',  $image);
                 $url = 'images/properties/';
                 $original_name = $image->getClientOriginalName();
                 $ext = ".".pathinfo( $original_name,PATHINFO_EXTENSION );
-                $imageNewName = $property->id.'-'.time().$ext;
+                $imageNewName = $property->id.Str::random(4).'-'.time().$ext;
 
                 $path_larg = $url.'larg/'.$imageNewName;
                 $path_medium = $url.'medium/'.$imageNewName;
@@ -201,7 +201,7 @@ class PropertyAPIController extends AppBaseController
                     $img = Image::find($image->id);
                     $imgName = explode("/", $image->url);
                     // return $imgName;
-                    
+
 
                     if($img->delete()){
                         Storage::disk('public')->delete('images/properties/larg/'.$imgName[7]);
@@ -210,14 +210,14 @@ class PropertyAPIController extends AppBaseController
                         $property = Property::with('images')->findOrFail($id);
                         return $this->sendResponse($property->toArray(), 'Image deleted successfully');
                     }
-                    
+
                     // return response()->json($property, 200);
-                
+
 
                 }
             }
         }else{
-            
+
             foreach ($property->images as $image) {
                 $img = Image::find($image->id);
                 $imgName = explode("/", $image->url);
@@ -225,7 +225,7 @@ class PropertyAPIController extends AppBaseController
                 Storage::disk('public')->delete('images/properties/medium/'.$imgName[7]);
                 Storage::disk('public')->delete('images/properties/small/'.$imgName[7]);
                 $img->delete();
-                
+
             }
             $property->delete();
             return $this->sendSuccess('Property deleted successfully');
@@ -245,6 +245,6 @@ class PropertyAPIController extends AppBaseController
         // $larg_image->crop(1280,800);
         $store = Storage::disk('public')->put( $path, $result_image->stream());
         return $store;
-        
+
     }
 }
