@@ -74,7 +74,7 @@ class Publication extends Model
             ->using(\App\Models\PublicationsTransactionTypes::class)
             ->withPivot('price', 'currency_id');
     }
-    
+
 
 
     /////////////////////////////
@@ -108,6 +108,21 @@ class Publication extends Model
         return $query;
     }
 
+    public function scopeActive($query, $filter)
+    {
+        if ($filter){
+
+            return $query->whereHas('property', function ($q) {
+                 $q->where('status_id', 1);
+
+            });
+
+        }
+
+
+        return $query;
+    }
+
 
 
     public function scopeFilter_params($query, $filter)
@@ -127,7 +142,7 @@ class Publication extends Model
                     unset($parametersDecode->price);
                     $query->whereHas('transaction_types', function ($q) use ($price) {
                         if(!$price->from) $price->from = 0;
-                        if(!$price->to ) $price->to = 10000000000; 
+                        if(!$price->to ) $price->to = 10000000000;
                         $q->where('price', '>=' ,$price->from)
                         ->where('price', '<=', $price->to);
                     });
@@ -138,7 +153,7 @@ class Publication extends Model
                     unset($parametersDecode->propertyType);
                     $query->whereHas('property', function ($q) use ($propertyType) {
                         $q->filterPropertyType($propertyType);
-    
+
                     });
                 }
                 //por tipo de transacción
@@ -149,47 +164,47 @@ class Publication extends Model
                         if($key === 0){
                             $query->whereHas('transaction_types', function ($q) use ($propertyStatus) {
                                 $q->where('transaction_type_id', $propertyStatus->id);
-            
+
                             });
                         }else{
                             $query->whereHas('transaction_types', function ($q) use ($propertyStatus) {
                                 $q->orWhere('transaction_type_id', $propertyStatus->id);
-            
+
                             });
                         }
                     }
                     return $query;
 
                 }
-    
+
                 //por ubicación
                 if (isset($parametersDecode->state)
                     || isset($parametersDecode->city)
-                    || isset($parametersDecode->municipality) 
-                    || isset($parametersDecode->neighborhood)) 
+                    || isset($parametersDecode->municipality)
+                    || isset($parametersDecode->neighborhood))
                 {
                     if(isset($parametersDecode->state)){
-                        $state = $parametersDecode->state; 
+                        $state = $parametersDecode->state;
                         unset($parametersDecode->state);
                         $query->whereHas('property', function ($q) use ($state) {
                             $q->filterState($state);
-        
+
                         });
-                    } 
+                    }
                     if(isset($parametersDecode->city)){
                         $city = $parametersDecode->city;
                         unset($parametersDecode->city);
                         $query->whereHas('property', function ($q) use ($city) {
                             $q->filterCity($city);
-        
+
                         });
                     }
-                    if(isset($parametersDecode->municipality)){ 
+                    if(isset($parametersDecode->municipality)){
                         $municipality = $parametersDecode->municipality;
                         unset($parametersDecode->municipality);
                         $query->whereHas('property', function ($q) use ($municipality) {
                             $q->filterMunicipality($municipality);
-        
+
                         });
                     }
 
@@ -198,12 +213,12 @@ class Publication extends Model
                         unset($parametersDecode->neighborhood);
                         $query->whereHas('property', function ($q) use ($neighborhood) {
                             $q->filterNeighborhood($neighborhood);
-        
+
                         });
                     }
                 }
                 ///////////////////////////////////////////////////////////////////////////
-                
+
                 ///////////////////////////////////////////////////////////////////////////
                 ///////ejecuto los filtros de Features
                 //////////////////////////////////////////////////////////////////////////
@@ -213,18 +228,18 @@ class Publication extends Model
                            $q->filterFeatures($key,$value);
                        });
                 }
-    
 
 
 
-                
+
+
 
             }
 
             return $query;
         }
         return $query;
-        
+
         // return $query;
     }
 }

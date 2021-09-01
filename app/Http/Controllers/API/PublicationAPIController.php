@@ -18,7 +18,7 @@ class PublicationAPIController extends AppBaseController
 {
 
 
- 
+
     public function index(Request $request)
     {
         $query = Publication::query();
@@ -53,12 +53,15 @@ class PublicationAPIController extends AppBaseController
         }else{
             $status_id = null;
         }
-        
-        
+
+        $active = $request->get('active') ? true : false;
+
+
 
         $publications = $query
             ->with('property', 'transaction_types', 'status')
             ->filter($request->get('filter'))
+            ->active($active)
             ->filter_status_id($status_id)
             ->filter_params($filterParams)
             ->orderBy('id', $sort)
@@ -89,7 +92,7 @@ class PublicationAPIController extends AppBaseController
         return $this->sendResponse($publication->toArray(), 'Publication saved successfully');
     }
 
- 
+
     public function show($id)
     {
         /** @var Publication $publication */
@@ -123,7 +126,7 @@ class PublicationAPIController extends AppBaseController
             $publication->transaction_types()->sync($trasactions, true);
             $publication->touch();
             $publication = Publication::with('property', 'transaction_types')->find($id);
-            
+
             return $this->sendResponse($publication->toArray(), 'Publication updated successfully');
 
         }
