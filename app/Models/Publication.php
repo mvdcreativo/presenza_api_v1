@@ -112,7 +112,7 @@ class Publication extends Model
     {
         if ($filter){
 
-            return $query->where('status_id', 8)
+            return $query->where('status_id', '!=' ,8)
             ->whereHas('property', function ($q) {
                 $q->where('status_id', 1);
 
