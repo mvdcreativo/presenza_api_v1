@@ -112,8 +112,9 @@ class Publication extends Model
     {
         if ($filter){
 
-            return $query->whereHas('property', function ($q) {
-                 $q->where('status_id', 1);
+            return $query->where('status_id', 8)
+            ->whereHas('property', function ($q) {
+                $q->where('status_id', 1);
 
             });
 
