@@ -127,7 +127,7 @@ class PropertyAPIController extends AppBaseController
         }
 
         $property->fill($request->all());
-        $property->slug = Str::slug($request->title);
+        if($request->title)$property->slug = Str::slug($request->title);
         $property->save();
         if($request->features){
             $features = $request->features;

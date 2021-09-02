@@ -26,13 +26,14 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('expenses_properties_users', 'ExpensesPropertiesUsersAPIController');
-    
-    
+
+
     Route::get('properties_user/{id}', 'UserAPIController@properties_user');
     Route::get('expenses_properties_users/user/{id}', 'ExpensesPropertiesUsersAPIController@user_expenses_all');
 });
 Route::get('owner_users', 'UserAPIController@owner_users');
 Route::get('customer_users', 'UserAPIController@customer_users');
+Route::get('publication_by_slug/{slug}', 'PublicationAPIController@showBySlug');
 
 Route::apiResource('users', 'UserAPIController');
 

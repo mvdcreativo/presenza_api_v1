@@ -115,6 +115,8 @@ class Publication extends Model
             return $query->where('status_id', '!=' ,8)
             ->whereHas('property', function ($q) {
                 $q->where('status_id', 1);
+            })
+            ->whereHas('transaction_types', function($q){
 
             });
 

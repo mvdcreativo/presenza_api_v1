@@ -109,6 +109,25 @@ class PublicationAPIController extends AppBaseController
         return $this->sendResponse($publication->toArray(), 'Publication retrieved successfully');
     }
 
+    public function showBySlug($slug)
+    {
+        /** @var Publication $publication */
+        $publication = Publication::with('property', 'transaction_types')
+        ->whereHas('property', function($q) use ($slug){
+            $q->where('slug', $slug);
+        })->first();
+
+        if (empty($publication)) {
+            return $this->sendError('Publication not found');
+        }
+
+        foreach ($publication->transaction_types as $key => $p) {
+            $p->pivot->currency = $p->pivot->currency;
+        }
+
+        return $this->sendResponse($publication->toArray(), 'Publication retrieved successfully');
+    }
+
     public function update($id, UpdatePublicationAPIRequest $request)
     {
         /** @var Publication $publication */

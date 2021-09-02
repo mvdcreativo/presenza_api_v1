@@ -11,33 +11,43 @@ class StatusSeeder extends Seeder
      */
     public function run()
     {
-        $status = new App\Models\Status;
-        $status->name = "Activo";
-        $status->for = "ALL";
-        $status->save();
+        // $status = new App\Models\Status;
+        // $status->name = "Activo";
+        // $status->for = "ALL";
+        // $status->save();
+
+        // $status = new App\Models\Status;
+        // $status->name = "Inactivo";
+        // $status->for = "ALL";
+        // $status->save();
+
+        // $status = new App\Models\Status;
+        // $status->name = "Destacada";
+        // $status->for = "PUB";
+        // $status->save();
+
+        // $status = new App\Models\Status;
+        // $status->name = "Normal";
+        // $status->for = "PUB";
+        // $status->save();
+
+        // $status = new App\Models\Status;
+        // $status->name = "Vendido";
+        // $status->for = "PUB";
+        // $status->save();
+
+        // $status = new App\Models\Status;
+        // $status->name = "Alquilado";
+        // $status->for = "PUB";
+        // $status->save();
 
         $status = new App\Models\Status;
-        $status->name = "Inactivo";
-        $status->for = "ALL";
-        $status->save();
-
-        $status = new App\Models\Status;
-        $status->name = "Destacada";
+        $status->name = "Reservado";
         $status->for = "PUB";
         $status->save();
 
         $status = new App\Models\Status;
-        $status->name = "Normal";
-        $status->for = "PUB";
-        $status->save();
-
-        $status = new App\Models\Status;
-        $status->name = "Vendido";
-        $status->for = "PUB";
-        $status->save();
-
-        $status = new App\Models\Status;
-        $status->name = "Alquilado";
+        $status->name = "Pausada";
         $status->for = "PUB";
         $status->save();
 
