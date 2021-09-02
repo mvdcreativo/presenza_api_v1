@@ -112,7 +112,7 @@ class Property extends Model
 
     public function publication()
     {
-        return $this->hasOne('App\Models\Publication');
+        return $this->hasOne('App\Models\Publication')->with('transaction_types');
     }
 
     public function features()
@@ -151,8 +151,8 @@ class Property extends Model
                 if (!$filterValue || $filterValue === true) {
                     $q->where('slug', $filterKey);
                 } else {
-                    
-                    $arr_values = explode("-",$filterValue);//convierto en array para los filtros que buscan entre valores" formato "val-val" 
+
+                    $arr_values = explode("-",$filterValue);//convierto en array para los filtros que buscan entre valores" formato "val-val"
 
                     switch ($filterValue) {
 
