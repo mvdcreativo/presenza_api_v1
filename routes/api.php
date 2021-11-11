@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 });
 Route::get('owner_users', 'UserAPIController@owner_users');
 Route::get('customer_users', 'UserAPIController@customer_users');
-Route::get('publication_by_slug/{slug}', 'PublicationAPIController@showBySlug');
+Route::get('publication_by_slug/{id}/{slug}', 'PublicationAPIController@showBySlug');
 
 Route::apiResource('users', 'UserAPIController');
 

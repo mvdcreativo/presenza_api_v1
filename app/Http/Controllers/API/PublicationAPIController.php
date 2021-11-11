@@ -109,12 +109,13 @@ class PublicationAPIController extends AppBaseController
         return $this->sendResponse($publication->toArray(), 'Publication retrieved successfully');
     }
 
-    public function showBySlug($slug)
+    public function showBySlug($id,$slug)
     {
         /** @var Publication $publication */
         $publication = Publication::with('property', 'transaction_types')
-        ->whereHas('property', function($q) use ($slug){
+        ->whereHas('property', function($q) use ($slug, $id){
             $q->where('slug', $slug);
+            $q->where('id', $id);
         })->first();
 
         if (empty($publication)) {
