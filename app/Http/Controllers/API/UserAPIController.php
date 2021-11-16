@@ -32,7 +32,7 @@ class UserAPIController extends AppBaseController
         }else{
             $per_page = 20;
         }
-        
+
         if ($request->get('sort')) {
             $sort = $request->get('sort');
         }else{
@@ -84,14 +84,14 @@ class UserAPIController extends AppBaseController
             $account->fill($input_account);
             $account->user_id = $user->id;
             $account->save();
-        
+
 
             if($request->hasFile('image')){
                 $image = $request->file('image');
                 $this->validate($request, [
 
                     'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048000'
-        
+
                 ]);
 
                 $url = 'images/users/';
@@ -104,7 +104,7 @@ class UserAPIController extends AppBaseController
 
                 // return [$larg_img , $medium_img , $small_img] ;
                 if ($larg_img) {
-                    
+
                     $account->fill(
                         [
                             'image' => asset('storage/'.$path_larg),
@@ -158,6 +158,7 @@ class UserAPIController extends AppBaseController
         }
 
         $user->fill($input_user);
+        if($request->password) $user->password = bcrypt($request->get('password'));
         $user->save();
 
         if($user->account){
@@ -176,7 +177,7 @@ class UserAPIController extends AppBaseController
             $this->validate($request, [
 
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048000'
-    
+
             ]);
 
             $url = 'images/users/';
@@ -189,7 +190,7 @@ class UserAPIController extends AppBaseController
 
             // return [$larg_img , $medium_img , $small_img] ;
             if ($larg_img) {
-                
+
                 $user->account->fill(
                     [
                         'image' => asset('storage/'.$path_larg),
@@ -220,7 +221,7 @@ class UserAPIController extends AppBaseController
 
         $account->delete();
 
-        return $this->sendSuccess('User deleted successfully');    
+        return $this->sendSuccess('User deleted successfully');
     }
 
     private function transformImage($image, $width, $height, $path)
@@ -233,13 +234,13 @@ class UserAPIController extends AppBaseController
         // $larg_image->crop(1280,800);
         $store = Storage::disk('public')->put( $path, $result_image->stream());
         return $store;
-        
+
     }
 
     public function properties_user($id)
     {
         $user = User::find($id)->properties_owner()->get();
-        
+
 
         return $this->sendResponse($user->toArray(), 'Properties retrieved successfully');
 
@@ -249,13 +250,13 @@ class UserAPIController extends AppBaseController
     {
         $query = User::query();
 
-        
+
         if ($request->get('per_page')) {
             $per_page = $request->get('per_page');
         }else{
             $per_page = 20;
         }
-        
+
         if ($request->get('sort')) {
             $sort = $request->get('sort');
         }else{
@@ -273,8 +274,8 @@ class UserAPIController extends AppBaseController
             ->filter($filter)
             ->has('properties_owner')
             ->paginate($per_page);
-            
-        
+
+
         return $this->sendResponse($users->toArray(), 'Account retrieved successfully');
 
     }
@@ -284,13 +285,13 @@ class UserAPIController extends AppBaseController
     {
         $query = User::query();
 
-        
+
         if ($request->get('per_page')) {
             $per_page = $request->get('per_page');
         }else{
             $per_page = 20;
         }
-        
+
         if ($request->get('sort')) {
             $sort = $request->get('sort');
         }else{
