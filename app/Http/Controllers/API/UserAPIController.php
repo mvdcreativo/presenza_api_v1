@@ -159,7 +159,7 @@ class UserAPIController extends AppBaseController
         }
 
         $user->fill($input_user);
-        if($request->get('password') && $request->get('password') != null && $request->get('password') != 'undefined') {
+        if($request->get('password') && $request->get('password') != null && $request->get('password') != '') {
             $user->password = bcrypt($request->get('password'));
         };
         $user->save();
