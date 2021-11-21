@@ -76,7 +76,7 @@ class UserAPIController extends AppBaseController
 
         $user = new User;
         $user->fill($input_user);
-        if(!$request->password) $user->password = bcrypt($faker->password);
+        if(!$request->password) $user->password = bcrypt($request->get('slug'));
         $user->save();
 
         if($user){
