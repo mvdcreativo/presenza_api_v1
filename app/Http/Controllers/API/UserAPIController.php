@@ -68,7 +68,7 @@ class UserAPIController extends AppBaseController
     public function store(Request $request)
     {
         $input_user = $request->only(['name','last_name','email','slug']);
-        $input_account = $request->except(['name','last_name','email','slug','password', 'image']);
+        $input_account = $request->except(['name','last_name','email','slug', 'image']);
         // $input_user['slug'] = Str::slug($request->name."-".$request->last_name);
         // if($request->role_id) $input_account['role_id'] = (int)$request->role_id;
 
@@ -76,7 +76,8 @@ class UserAPIController extends AppBaseController
 
         $user = new User;
         $user->fill($input_user);
-        if(!$request->password) $user->password = bcrypt($request->get('slug'));
+        if(!$request->get('password')) $user->password = bcrypt($request->get('slug'));
+
         $user->save();
 
         if($user){
@@ -158,7 +159,9 @@ class UserAPIController extends AppBaseController
         }
 
         $user->fill($input_user);
-        if($request->password) $user->password = bcrypt($request->get('password'));
+        if($request->get('password') && $request->get('password') != null && $request->get('password') != 'undefined') {
+            $user->password = bcrypt($request->get('password'));
+        };
         $user->save();
 
         if($user->account){
