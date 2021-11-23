@@ -34,8 +34,10 @@ class MessageController extends Controller
             'email'=> 'required|email',
             'phone'=> 'required',
             'message'=> 'required|min:3',
-            'property'=> 'string'
+            'property'=> 'accepted'
         ]);
+
+
 
         $message= new Message;
         $message->name = $request->name;

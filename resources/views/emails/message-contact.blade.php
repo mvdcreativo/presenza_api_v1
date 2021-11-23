@@ -65,10 +65,10 @@
     <div class="container">
             <div class="content">
                 <h1>Mensaje recibido desde la Web</h1>
-                @if ($msg['property'])
-                <p>Cliente interesado en la propiedad:</p>
-                <p><strong>{{ $msg['poperty'] }}</strong></p>
-                @endif
+                    @if ($msg['property'])
+                    <p>Cliente interesado en la propiedad:</p>
+                    <p><strong>{{ $msg['poperty'] }}</strong></p>
+                    @endif
                 <p><strong>{{ $msg['name'] }}</strong> escribió...</p>
                 <p>{{ $msg['message'] }}</p>
                 <p>
