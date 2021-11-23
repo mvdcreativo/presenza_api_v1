@@ -67,7 +67,7 @@
                 <h1>Mensaje recibido desde la Web</h1>
                     @if (isset($msg['property']))
                     <p>Cliente interesado en la propiedad:</p>
-                    <p><strong>{{ $msg['poperty'] }}</strong></p>
+                    <p><strong>{{ $msg['property'] }}</strong></p>
                     @endif
                 <p><strong>{{ $msg['name'] }}</strong> escribió...</p>
                 <p>{{ $msg['message'] }}</p>
