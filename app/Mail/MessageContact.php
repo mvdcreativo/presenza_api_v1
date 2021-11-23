@@ -6,10 +6,13 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Sichikawa\LaravelSendgridDriver\SendGrid;
+
 
 class MessageContact extends Mailable
 {
     use Queueable, SerializesModels;
+    use SendGrid;
 
     public $subject = 'Nuevo mensaje de Web www.presenzaprop.com.ar';
     public $msg;
@@ -31,6 +34,14 @@ class MessageContact extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.message-contact');
+        return $this->view('emails.message-contact')->sendgrid([
+            'personalizations' => [
+                [
+                    'substitutions' => [
+                        ':myname' => 's-ichikawa',
+                    ],
+                ],
+            ],
+        ]);;
     }
 }
