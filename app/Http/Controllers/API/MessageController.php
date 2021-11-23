@@ -46,7 +46,8 @@ class MessageController extends Controller
         $message->message = $request->message;
         $message->save();
 
-        $mail_destino = "sbonzini@picaportedesign.com";
+        $mail_destino = "presenzaprop@gmail.com";
+        // $mail_destino = "sbonzini@picaportedesign.com";
 
 
         try {
