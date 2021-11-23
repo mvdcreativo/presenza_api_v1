@@ -34,7 +34,7 @@ class MessageController extends Controller
             'email'=> 'required|email',
             'phone'=> 'required',
             'message'=> 'required|min:3',
-            'property'=> 'accepted'
+            'property'=> 'nullable'
         ]);
 
 
