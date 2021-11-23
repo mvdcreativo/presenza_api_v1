@@ -6,7 +6,10 @@ use App\Mail\MessageContact;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
+use App\Notifications\ContatNotification;
+use Illuminate\Support\Facades\Log;
 USE Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class MessageController extends Controller
 {
@@ -26,7 +29,7 @@ class MessageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function __invoke(Request $request)
     {
         $msg = $request->validate([
             'name'=> 'required',
@@ -43,46 +46,20 @@ class MessageController extends Controller
         $message->save();
 
         $mail_destino = "mvdcreativo@gmail.com";
+        try {
+            Notification::route('mail', $mail_destino)->notify(new ContatNotification($msg));
 
-        Mail::to($mail_destino)->queue(new MessageContact($msg));
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json("mensaje error", 500);
 
-
+        }
 
         return response()->json("mensaje enviado", 200);
 
+
+
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
