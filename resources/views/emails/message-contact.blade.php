@@ -65,7 +65,7 @@
     <div class="container">
             <div class="content">
                 <h1>Mensaje recibido desde la Web</h1>
-                    @if ($msg['property'])
+                    @if (isset($msg['property']))
                     <p>Cliente interesado en la propiedad:</p>
                     <p><strong>{{ $msg['poperty'] }}</strong></p>
                     @endif
