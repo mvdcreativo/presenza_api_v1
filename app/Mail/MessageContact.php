@@ -33,15 +33,15 @@ class MessageContact extends Mailable
     public function build()
     {
         $address = 'mvdcreativo@gmail.com';
-        $subject = 'Nuevo mensaje desde la web';
-        $name = 'Web presenzaprop.com.ar';
+        $subject = 'Nuevo mensaje desde la web presenzaprop.com.ar';
+        // $name 'Web presenzaprop.com.ar';
 
 
         return $this->view('emails.message-contact')
-        ->from($address, $name)
+        ->from($this->msg['email'] , $this->msg['name'] )
         // ->cc($address, $name)
         // ->bcc($address, $name)
-        // ->replyTo($address, $name)
+        ->replyTo($this->msg['email'] , $this->msg['name'] )
         ->subject($subject)
         ->with($this->msg)
         ;

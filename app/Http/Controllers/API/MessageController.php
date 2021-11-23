@@ -47,7 +47,9 @@ class MessageController extends Controller
 
 
         try {
-            Mail::to($mail_destino)->queue(new MessageContact($msg));
+            Mail::to($mail_destino)
+
+            ->queue(new MessageContact($msg));
             // Notification::route('mail', $mail_destino)->notify(new ContatNotification($msg));
 
         } catch (\Throwable $th) {
