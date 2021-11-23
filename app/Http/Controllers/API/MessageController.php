@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Message;
 use App\Mail\MessageContact;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 USE Illuminate\Support\Facades\Mail;
 
 class MessageController extends Controller
