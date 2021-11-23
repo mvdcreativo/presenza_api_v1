@@ -33,9 +33,9 @@
             background-color:  #FFF;
         }
         .container.content{
-            
+
             position: relative;
-            
+
         }
         .container.content p{
             width: 100%;
@@ -70,16 +70,16 @@
                 <p>
                 <strong>Contactar a:</strong> <br>
                     {{ $msg['email'] }} o via telefónica {{ $msg['phone'] }}
-                </p>        
+                </p>
             </div>
             <div class="image">
             <!-- <img src="https://api.nuevaerauruguay.com/storage/images/mails/bg-mail.png" alt=""> -->
-            
-                <img src="{{ asset('storage/images/mails/bg-mail.png') }}" alt="">
+
+                {{-- <img src="{{ asset('storage/images/mails/bg-mail.png') }}" alt=""> --}}
 
             </div>
     </div>
 </div>
-    
+
 </body>
 </html>

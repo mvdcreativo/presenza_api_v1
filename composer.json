@@ -29,8 +29,7 @@
         "laravel/passport": "~9.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
-        "laravelcollective/html": "^6.1",
-        "s-ichikawa/laravel-sendgrid-driver": "^3.0"
+        "laravelcollective/html": "^6.1"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
