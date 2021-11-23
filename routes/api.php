@@ -68,7 +68,7 @@ Route::apiResource('publications', 'PublicationAPIController');
 Route::apiResource('images', 'ImageAPIController');
 
 
-Route::apiResource('send-message-contact', 'Api\MessageController');
+Route::apiResource('send-message-contact', 'MessageController');
 
 Route::apiResource('transactions', 'TransactionAPIController');
 
