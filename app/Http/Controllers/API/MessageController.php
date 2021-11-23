@@ -44,7 +44,7 @@ class MessageController extends Controller
 
         $mail_destino = "mvdcreativo@gmail.com";
 
-        Mail::to($mail_destino)->send(new MessageContact($msg));
+        Mail::to($mail_destino)->queue(new MessageContact($msg));
 
 
 
