@@ -6,10 +6,8 @@ use App\Mail\MessageContact;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
-use App\Notifications\ContatNotification;
 use Illuminate\Support\Facades\Log;
 USE Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
 
 class MessageController extends Controller
 {
@@ -46,8 +44,11 @@ class MessageController extends Controller
         $message->save();
 
         $mail_destino = "mvdcreativo@gmail.com";
+
+
         try {
-            Notification::route('mail', $mail_destino)->notify(new ContatNotification($msg));
+            Mail::to($mail_destino)->queue(new MessageContact($msg));
+            // Notification::route('mail', $mail_destino)->notify(new ContatNotification($msg));
 
         } catch (\Throwable $th) {
             Log::error($th);
@@ -57,9 +58,7 @@ class MessageController extends Controller
 
         return response()->json("mensaje enviado", 200);
 
-
-
-
     }
+
 
 }
