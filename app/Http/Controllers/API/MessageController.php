@@ -33,7 +33,8 @@ class MessageController extends Controller
             'name'=> 'required',
             'email'=> 'required|email',
             'phone'=> 'required',
-            'message'=> 'required|min:3'
+            'message'=> 'required|min:3',
+            'property'=> 'string'
         ]);
 
         $message= new Message;
